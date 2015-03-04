@@ -39,7 +39,7 @@
   <body>
         <div height="300" width="400" id="remotesVideos"></div>
       <div id="localuser">
-      <video height="300" id="localVideo">LOCAL</video>
+      <video controls height="300" id="localVideo">LOCAL</video>
       </div>
 
     <div id="ic">Incoming Flow:</div>
@@ -60,10 +60,12 @@
             autoRequestMedia: true
         });
 
+        var chatroom = <%- JSON.stringify(chatroom) %>;
+
         // we have to wait until it's ready
         webrtc.on('readyToCall', function () {
             // you can name it anything
-            webrtc.joinRoom('superchat');
+            webrtc.joinRoom(chatroom);
         });
   </script>
   </body>
