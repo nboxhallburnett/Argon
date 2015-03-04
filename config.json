@@ -1,7 +1,8 @@
 {
   "routes":
   [
-    { "path": "/", "callback": "application#index" }
+    { "path": "/", "callback": "application#start" },
+    { "path": "/chat", "callback":"application#chat"}
   ],
   "filters":
   [
@@ -9,6 +10,6 @@
   ],
   "websockets":
   [
-  	{ "event": "", "callback": ""}
+    {"event": "newChatMsg", "callback": "chatroom#receiveMessage"}
   ]
 }

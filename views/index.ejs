@@ -1,18 +1,56 @@
-<!DOCTYPE html>
 <html>
-<head>
-	<title><%= title %></title>
-    <link rel='stylesheet' href='/css/style.css' />
+  <head>
+    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="//simplewebrtc.com/latest.js"></script>
-</head>
-<body>
-	<div><%= chatroom %></div>
-	<video height="300" id="localVideo"></video>
-	<div height="300" id="remotesVideos"></div>
-</body>
-<footer>
     <script>
-    	var chatroom = <%- JSON.stringify(chatroom) %>;
+      //establish websocket connection with server
+      var iosocket = io.connect();
+      iosocket.on('connect', function () {
+      $('#incomingChatMessages').append($('<li class="alert">Connected</li>'));
+
+      //when received message from server
+      iosocket.on('message', function(data) {
+        var icm = $('<li class="active"></li>');
+        $('#incomingChatMessages').append(icm.text(data.message));
+        setTimeout(function() { icm.removeClass('active') }, 1500);
+        $('#chat-ctnr').scrollTop($('#incomingChatMessages').height() + 100 );
+      });
+      iosocket.on('disconnect', function() {
+        iosocket.on('message', null);
+          $('#incomingChatMessages').append('<li class="alert">Disconnected</li>');
+        });
+      });
+
+      //send new chat message
+      function sendMsg() {
+        var nick = <%- JSON.stringify(nick) %>;
+        var text = nick + ": " + $('#outgoingChatMessage').val();
+        iosocket.emit('newChatMsg', {message: nick + ": " + $('#outgoingChatMessage').val()});
+        var ocm = $('<li class="active"></li>');
+        $('#incomingChatMessages').append(ocm.text(text));
+        $('#chat-ctnr').scrollTop($('#incomingChatMessages').height() + 100 );
+        setTimeout(function() { ocm.removeClass('active') }, 1500);
+        $('#outgoingChatMessage').val('');
+      }
+    </script>
+  </head>
+  <body>
+        <div height="300" width="400" id="remotesVideos"></div>
+      <div id="localuser">
+      <video controls height="300" id="localVideo">LOCAL</video>
+      </div>
+
+    <div id="ic">Incoming Flow:</div>
+    <div id="chat-ctnr">
+      <ul id="incomingChatMessages"></ul>
+    </div>
+
+    <input type="text" id="outgoingChatMessage"><input id="sendMessageButton" type="button" value="Send" onclick='sendMsg()'>
+
+
+      <script>
         var webrtc = new SimpleWebRTC({
             // the id/element dom element that will hold "our" video
             localVideoEl: 'localVideo',
@@ -22,14 +60,13 @@
             autoRequestMedia: true
         });
 
-        console.log(chatroom);
+        var chatroom = <%- JSON.stringify(chatroom) %>;
 
         // we have to wait until it's ready
         webrtc.on('readyToCall', function () {
             // you can name it anything
             webrtc.joinRoom(chatroom);
         });
-
-    </script>
-</footer>
+  </script>
+  </body>
 </html>
