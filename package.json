@@ -1,25 +1,32 @@
 {
-  "name": "whatever-you-want",
+  "name": "Argon",
   "version": "0.1.0",
   "description": "",
   "framework": "mvc",
   "bodyParser": true,
   "main": "app.js",
-  "service": {"env_id":"","org_id":""},
-  "keywords": [
-  ],
+  "service": {
+    "env_id": "",
+    "org_id": ""
+  },
+  "keywords": [],
   "author": "",
-  "maintainers": [
-  ],
-  "contributors": [
-  ],
+  "maintainers": [],
+  "contributors": [],
   "repository": {
     "type": "git",
     "url": ""
   },
   "preferGlobal": false,
   "dependencies": {
+    "socket.io": "*",
+    "node-static": "*",
+    "socket.io-client": "*",
+    "uglify-js": "*"
   },
-  "license":"",
+  "scripts": {
+    "start": "app.js"
+  },
+  "license": "",
   "private": true
 }

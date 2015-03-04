@@ -1,6 +1,7 @@
 function getConfig(){
 	return {
-		"chatroom": ""
+		"chatroom": "",
+		"nick": ""
 	}
 } 
 
